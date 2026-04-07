@@ -68,7 +68,7 @@ class LoanModel :
 
         return {
             "approved" : approved,
-            "probaility" : pos_p,
+            "probability" : pos_p,
             "risk_grade" : risk_grade,
         }
 

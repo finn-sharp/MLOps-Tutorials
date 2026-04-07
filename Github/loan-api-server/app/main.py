@@ -51,6 +51,10 @@ app = FastAPI(
     lifespan = lifespan
 )
 
+@app.get('/')
+async def root():
+    return {"data" : "서버동작"}
+
 # 서버가 살아있는지 체크하는 것 : 로드밸런서가 서버 생존 여부를 체크함***
 # 새로운 컴퓨터를 띄우는 역할 : ECS in AWS***
 @app.get('/health')
@@ -69,8 +73,8 @@ async def predict(request : LoanRequest):
     model = app.state.model
 
     try :    
-        model.predict(request.model_dump()) # model_dump : key를 english로 변환
-        LoanResponse(**result) # dict, 가변인자처리법
+        result = model.predict(request.model_dump()) # model_dump : key를 english로 변환
+        return LoanResponse(**result) # dict, 가변인자처리법
 
     except RuntimeError as e:
         raise HTTPException(status_code=503, detail=str(e))
