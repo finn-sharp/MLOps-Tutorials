@@ -31,7 +31,7 @@ class LoanModel :
         self.label_encoder: dict[str, Any] = {}
         self.feature_names: list[str] = []
         self.threshold: float = 0.5
-        self.model_version: str = "1.1.0"
+        self.model_version: str = "1.1.1"
 
     def load(self, model_dir: str = "models") -> None:
         pipeline_path = os.path.join( model_dir, 'loan_pipeline.pkl')

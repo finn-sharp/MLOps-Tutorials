@@ -46,7 +46,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title = '대출 심사 예측 API',
     description = 'ML 모델 기반 대출 승인 여부를 예측하는 API',
-    version = '1.1.0',
+    version = '1.1.1',
     # 이렇게 인자로 넣어주면, app실행 시 lifespan 함수를 실행시켜 줌
     lifespan = lifespan
 )
