@@ -1,0 +1,39 @@
+# 1. 이름을 정해줍니다.
+name: Deploy to EC2 (No Docker)
+
+# 2. 이 스크립트를 언제 동작시킬 건지 정해줍니다.
+on:
+  # local 작업 내용이 main에 push가 되면 아래 스크립트를 동작하겠습니다.
+  push:
+    branches: [main]
+
+jobs:
+  deploy:
+    # 3. github 측에서 준비한 ubuntu resource를 활용할 겁니다.
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@v1
+        with:
+          # 4. 들어갈 때, 필요한 EC2 관련 보안정보들을 전달해줍니다.
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USERNAME }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd ~/mlops-project/Github/loan-api-server
+
+            # 코드 최신화
+            git pull origin main
+
+            # miniconda 환경 활성화 및 패키지 설치
+            source ~/miniconda3/etc/profile.d/conda.sh
+            conda activate mlops
+            pip install --no-cache-dir --no-build-isolation -r requirements.txt
+
+            # 기존 서버 종료 후 재시작
+            pkill -f "uvicorn app.main:app" || true
+            nohup uvicorn app.main:app --host 0.0.0.0 --port 8000 > /dev/null 2>&1 &
