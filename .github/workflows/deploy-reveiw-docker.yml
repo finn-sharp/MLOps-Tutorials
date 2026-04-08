@@ -40,5 +40,5 @@ jobs:
             fuser -k 8005/tcp || true
             sleep 2
 
-            # 다시 재수정
-            sudo docker run -d --name review-analyzer -e GEMINI_API_KEY="${{ secrets.GEMINI_API_KEY }}" -p 8005:8005 review-analyzer
+            # Local env 에서는 GEMINI_API로 맞췄음, GITHUB에서는 GEMINI_API_KEY로 맞췄음 
+            sudo docker run -d --name review-analyzer -e GEMINI_API="${{ secrets.GEMINI_API }}" -p 8005:8005 review-analyzer
