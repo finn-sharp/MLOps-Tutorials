@@ -31,7 +31,7 @@ jobs:
             
             git pull origin main
             
-            sudo docker build -t review-analyzer .
+            sudo docker build --no-cache -t review-analyzer .
 
             sudo docker stop review-analyzer || true
             sudo docker rm review-analyzer || true
