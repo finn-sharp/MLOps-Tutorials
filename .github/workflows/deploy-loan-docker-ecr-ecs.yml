@@ -33,17 +33,14 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
-      # 4. 프로젝트 폴더로 이동
-      - name: Change to project directory
-        run: |
-          cd Github/loan-api-server-ecs    
-
-      # 5. Docker 이미지 빌드 & ECR Push
+      # 4. Docker 이미지 빌드 & ECR Push
       - name: Build and push Docker image
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ github.sha }}
         run: |
+          # 디렉토리는 매 step마다 초기화된다고 함 .. !! 그래서 CD를 여기서 수행 !!
+          cd Github/loan-api-server-ecs 
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:latest .
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
@@ -51,7 +48,7 @@ jobs:
           echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
         id: build-image
 
-      # 6. ECS 서비스 업데이트 (새 이미지로 재배포)
+      # 5. ECS 서비스 업데이트 (새 이미지로 재배포)
       - name: Deploy to ECS
         run: |
           aws ecs update-service \
