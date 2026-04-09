@@ -18,4 +18,4 @@ COPY . .
 EXPOSE 8000
 
 # 6. 컨테이너가 시작될 때 실행할 명령어를 설정할게요
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
