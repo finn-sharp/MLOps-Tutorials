@@ -9,7 +9,7 @@ ecs_client = boto3.client('ecs', region_name='ap-northeast-2')
 CLUSTER_NAME = 'mlops-lab-cluster'
 SERVICE_NAME = 'student-13-api-service'  
 # ==============================
-s
+
 def lambda_handler(event, context):
     """
     S3 업로드 이벤트를 받아 ECS 서비스를 재시작합니다.
